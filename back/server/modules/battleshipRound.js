@@ -160,7 +160,13 @@ class BattleshipRound {
     }
     aiTurn() {
         const opMap = this.maps[this.host]
-        if (this.aiType == EASY) {
+
+        // Hard difficulty logic: only target known ships
+        if (this.aiType === HARD) {
+            return this.targetNextShipTile(opMap);
+        }
+
+        if (this.aiType == EASY || this.aiType === MEDIUM) {
             while(1) {
                 let tile = this.randomTile();
                 if (!opMap.Map[tile.x][tile.y].isHit) {
@@ -180,6 +186,17 @@ class BattleshipRound {
         return {x:x, y:y}
     }
 
+    targetNextShipTile(opMap) {
+        for (let x = 0; x < this.gridDimensions[0]; x++) {
+            for (let y = 0; y < this.gridDimensions[1]; y++) {
+                let cell = opMap.Map[x][y];
+                if (cell.shipId !== null && !cell.isHit) {
+                    return {x: x, y: y};
+                }
+            }
+        }
+        return this.randomTile(); // fallback is no ships are found, should never reach this
+    }
     
     //attempts to fire at a target
     attemptFire(x, y, targetPlayer, sourcePlayer){
