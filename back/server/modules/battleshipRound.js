@@ -142,6 +142,7 @@ class BattleshipRound {
         this.whosTurn = null;
         this.hasPlacedShips = {};
         this.aiType = NO_AI;
+        this.aiTargetList = [];
     }
     //adds player and attaches a map
     addPlayer(clientId){
@@ -163,7 +164,7 @@ class BattleshipRound {
 
         // Hard difficulty logic: only target known ships
         if (this.aiType === HARD) {
-            return this.targetNextShipTile(opMap);
+            return this.targetShipTiles(opMap);
         }
 
         if (this.aiType == EASY || this.aiType === MEDIUM) {
@@ -186,16 +187,26 @@ class BattleshipRound {
         return {x:x, y:y}
     }
 
-    targetNextShipTile(opMap) {
-        for (let x = 0; x < this.gridDimensions[0]; x++) {
-            for (let y = 0; y < this.gridDimensions[1]; y++) {
-                let cell = opMap.Map[x][y];
-                if (cell.shipId !== null && !cell.isHit) {
-                    return {x: x, y: y};
+    targetShipTiles(opMap) {
+        // If the target list is empty, we need to scan the grid and populate it
+        if (this.aiTargetList.length === 0) {
+            for (let x = 0; x < this.gridDimensions[0]; x++) {
+                for (let y = 0; y < this.gridDimensions[1]; y++) {
+                    let cell = opMap.Map[x][y];
+                    if (cell.shipId !== null && !cell.isHit) {
+                        this.aiTargetList.push({ x: x, y: y }); // Save ship tile to the target list
+                    }
                 }
             }
         }
-        return this.randomTile(); // fallback is no ships are found, should never reach this
+
+        // Return the next tile from the target list
+        if (this.aiTargetList.length > 0) {
+            return this.aiTargetList.shift(); // Remove and return the next ship tile
+        }
+
+        // return a random tile if empty
+        return this.randomTile();
     }
     
     //attempts to fire at a target
