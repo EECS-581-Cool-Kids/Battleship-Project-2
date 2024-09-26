@@ -90,9 +90,9 @@ io.on('connection', (socket) => {
 
     socket.emit('getClientId', {});
 
-    // Placeholder for future AI implementation
+    // AI implementation
     socket.on('initiateSinglePlayer', (numShips, difficulty) => {
-        // TODO: ALLOW SPECIFYING DIFFICULTY
+
         if (difficulty === 'easy') {
             AI_TYPE = EASY;
         }
