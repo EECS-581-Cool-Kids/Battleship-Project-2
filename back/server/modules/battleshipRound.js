@@ -162,18 +162,24 @@ class BattleshipRound {
     aiTurn() {
         const opMap = this.maps[this.host]
 
-        // Hard difficulty logic: only target known ships
-        if (this.aiType === HARD) {
-            return this.targetShipTiles(opMap);
-        }
-
         if (this.aiType == EASY || this.aiType === MEDIUM) {
             while(1) {
                 let tile = this.randomTile();
                 if (!opMap.Map[tile.x][tile.y].isHit) {
+                    //medium logic to be positioned here
                     return tile;
                     
                 }
+            }
+        }
+        // Hard difficulty logic: only target known ships
+        if (this.aiType === HARD) {
+            // Return the next tile from the target list
+            if (this.aiTargetList.length > 0) {
+                return this.aiTargetList.shift(); // Remove and return the next ship tile
+            } else {
+                this.targetShipTiles(opMap);
+                return this.aiTargetList.shift();
             }
         }
     }
@@ -189,24 +195,14 @@ class BattleshipRound {
 
     targetShipTiles(opMap) {
         // If the target list is empty, we need to scan the grid and populate it
-        if (this.aiTargetList.length === 0) {
-            for (let x = 0; x < this.gridDimensions[0]; x++) {
-                for (let y = 0; y < this.gridDimensions[1]; y++) {
-                    let cell = opMap.Map[x][y];
-                    if (cell.shipId !== null && !cell.isHit) {
-                        this.aiTargetList.push({ x: x, y: y }); // Save ship tile to the target list
-                    }
+        for (let x = 0; x < this.gridDimensions[0]; x++) {
+            for (let y = 0; y < this.gridDimensions[1]; y++) {
+                let cell = opMap.Map[x][y];
+                if (cell.shipId !== null && !cell.isHit) {
+                    this.aiTargetList.push({ x: x, y: y }); // Save ship tile to the target list
                 }
             }
         }
-
-        // Return the next tile from the target list
-        if (this.aiTargetList.length > 0) {
-            return this.aiTargetList.shift(); // Remove and return the next ship tile
-        }
-
-        // return a random tile if empty
-        return this.randomTile();
     }
     
     //attempts to fire at a target
