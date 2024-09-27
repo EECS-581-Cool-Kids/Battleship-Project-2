@@ -143,6 +143,7 @@ class BattleshipRound {
         this.hasPlacedShips = {};
         this.aiType = NO_AI;
         this.aiTargetList = [];
+        
     }
     //adds player and attaches a map
     addPlayer(clientId){
@@ -162,16 +163,37 @@ class BattleshipRound {
     aiTurn() {
         const opMap = this.maps[this.host]
 
-        if (this.aiType == EASY || this.aiType === MEDIUM) {
+        if (this.aiType == EASY) {
             while(1) {
                 let tile = this.randomTile();
                 if (!opMap.Map[tile.x][tile.y].isHit) {
-                    //medium logic to be positioned here
                     return tile;
-                    
                 }
             }
         }
+        if (this.aiType == MEDIUM) {
+            // If a target list exists (i.e., AI hit something), process those first
+            if (this.aiTargetList.length > 0) {
+                let targetTile = this.aiTargetList.shift();
+                if (!opMap.Map[targetTile.x][targetTile.y].isHit) {
+                    return targetTile;
+                }
+            }
+
+            while (1) {
+                let tile = this.randomTile();
+
+                if (!opMap.Map[tile.x][tile.y].isHit) {
+                    if (opMap.Map[tile.x][tile.y].shipId !== null) {
+                        // A ship was hit, so start targeting adjacent tiles
+                        this.aiTargetList = this.getAdjacentTiles(tile.x, tile.y, opMap);
+                        return tile;
+                    }
+                    return tile;
+                }
+            }
+        }
+
         // Hard difficulty logic: only target known ships
         if (this.aiType === HARD) {
             // Return the next tile from the target list
@@ -187,12 +209,35 @@ class BattleshipRound {
      * @returns {Coordinate}
      */
     randomTile() {
-        let x = Math.trunc(Math.random() * (this.gridDimensions[0] - 1));
-        let y = Math.trunc(Math.random() * (this.gridDimensions[1] - 1));
+        let x = Math.trunc(Math.random() * (this.gridDimensions[0]));
+        let y = Math.trunc(Math.random() * (this.gridDimensions[1]));
 
         return {x:x, y:y}
     }
 
+    getAdjacentTiles(x, y, opMap) {
+        const directions = [
+            { dx: -1, dy: 0 }, // left
+            { dx: 1, dy: 0 },  // right
+            { dx: 0, dy: -1 }, // up
+            { dx: 0, dy: 1 }   // down
+        ];
+
+        let adjacentTiles = [];
+    
+        directions.forEach(dir => {
+            let newX = x + dir.dx;
+            let newY = y + dir.dy;
+    
+            if (newX >= 0 && newX < this.gridDimensions[0] &&
+                newY >= 0 && newY < this.gridDimensions[1] &&
+                !opMap.Map[newX][newY].isHit) {
+                adjacentTiles.push({ x: newX, y: newY });
+            }
+        });
+    
+        return adjacentTiles;
+    }
     targetShipTiles(opMap) {
         // If the target list is empty, we need to scan the grid and populate it
         for (let x = 0; x < this.gridDimensions[0]; x++) {
