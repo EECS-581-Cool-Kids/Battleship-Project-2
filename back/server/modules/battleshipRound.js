@@ -247,196 +247,196 @@ class BattleshipRound {  //creates a battleship round object
                         this.firstHit = tile; // Set the first hit
                         this.currentTarget = tile; // Set current target to the first hit tile
                         return tile; // Return the tile
-                    } else { // If the tile does not have a ship ID
+                    }  // End if the tile has a ship ID
                     return tile; // Return the tile
-                } // End if the tile does not have a ship ID
-            } // End if the tile has not been hit
-        } // End while the first hit is null
+                }  // End if the tile has not been hit
+            } // End while the first hit is null
+        } // End if the AI is medium
 
         // Hard difficulty logic: only target known ships
-        if (this.aiType === HARD) {
+        if (this.aiType === HARD) { // If the AI is hard
             // Return the next tile from the target list
-            if (this.aiTargetList.length > 0) {
+            if (this.aiTargetList.length > 0) { // If the AI target list length is greater than 0
                 return this.aiTargetList.shift(); // Remove and return the next ship tile
-            } else {
-                this.targetShipTiles(opMap);
-                return this.aiTargetList.shift();
-            }
-        }
-    }
+            } else { // If the AI target list length is not greater than 0
+                this.targetShipTiles(opMap); // Target the ship tiles
+                return this.aiTargetList.shift(); // Remove and return the next ship tile
+            } // End if the AI target list length is not greater than 0
+        } // End if the AI is hard
+    } // End aiTurn
     /**
-     * @returns {Coordinate}
+     * @returns {Coordinate} // Coordinate object
      */
 
     //selects tile at random from grid to be targeted. Used in Easy and Medium difficulty
-    randomTile() {
-        let x = Math.trunc(Math.random() * (this.gridDimensions[0]));
-        let y = Math.trunc(Math.random() * (this.gridDimensions[1]));
+    randomTile() { // Get a random tile
+        let x = Math.trunc(Math.random() * (this.gridDimensions[0])); // Set the x
+        let y = Math.trunc(Math.random() * (this.gridDimensions[1])); // Set the y
 
-        return { x: x, y: y }
-    }
+        return { x: x, y: y } // Return the tile
+    } // End randomTile
     //aquires the next coordinate for targeting based on the existing direction of attack. Used in medium difficulty
-    getNextTileInDirection(fromTile, direction, opMap) {
-        let newX = fromTile.x;
-        let newY = fromTile.y;
+    getNextTileInDirection(fromTile, direction, opMap) { // Get the next tile in the direction
+        let newX = fromTile.x; // Set the new x
+        let newY = fromTile.y; // Set the new y
 
-        switch (direction) {
-            case "left":
-                newX -= 1;
-                break;
-            case "right":
-                newX += 1;
-                break;
-            case "up":
-                newY -= 1;
-                break;
-            case "down":
-                newY += 1;
-                break;
+        switch (direction) { // Switch on the direction
+            case "left":  // If left
+                newX -= 1; // Decrement x
+                break; // Break
+            case "right":  // If right
+                newX += 1; // Increment x
+                break; // Break
+            case "up":  // If up
+                newY -= 1; // Decrement y
+                break; // Break
+            case "down":  // If down
+                newY += 1; // Increment y
+                break; // Break
         }
 
-        if (
-            newX >= 0 && newX < this.gridDimensions[0] &&
-            newY >= 0 && newY < this.gridDimensions[1] &&
-            !opMap.Map[newX][newY].isHit
-        ) {
-            return { x: newX, y: newY };
-        }
+        if ( // If the new x and y are within bounds and the tile has not been hit
+            newX >= 0 && newX < this.gridDimensions[0] && // If the new x is within bounds
+            newY >= 0 && newY < this.gridDimensions[1] && // If the new y is within bounds
+            !opMap.Map[newX][newY].isHit // If the tile has not been hit
+        ) { // End if the new x and y are within bounds and the tile has not been hit
+            return { x: newX, y: newY }; // Return the new tile
+        } // End if the new x and y are within bounds and the tile has not been hit
 
-        return false;
-    }
+        return false; // Return false
+    } // End getNextTileInDirection
     //once first hit is score the tiles on every side of the first hit will be appended to a list for potential targeting, used in medium difficulty 
-    getAdjacentTiles(x, y, opMap) {
-        const directions = [
+    getAdjacentTiles(x, y, opMap) { // Get the adjacent tiles
+        const directions = [ // Directions array
             { dx: -1, dy: 0 }, // left
             { dx: 1, dy: 0 },  // right
             { dx: 0, dy: -1 }, // up
             { dx: 0, dy: 1 }   // down
         ];
 
-        let adjacentTiles = [];
+        let adjacentTiles = []; // Adjacent tiles array
 
-        directions.forEach(dir => {
-            let newX = x + dir.dx;
-            let newY = y + dir.dy;
+        directions.forEach(dir => { // For each direction
+            let newX = x + dir.dx; // Set the new x
+            let newY = y + dir.dy; // Set the new y
 
-            if (newX >= 0 && newX < this.gridDimensions[0] &&
-                newY >= 0 && newY < this.gridDimensions[1] &&
-                !opMap.Map[newX][newY].isHit) {
-                adjacentTiles.push({ x: newX, y: newY });
-            }
-        });
+            if (newX >= 0 && newX < this.gridDimensions[0] && // If the new x is within bounds
+                newY >= 0 && newY < this.gridDimensions[1] && // If the new y is within bounds
+                !opMap.Map[newX][newY].isHit) { // If the tile has not been hit
+                adjacentTiles.push({ x: newX, y: newY }); // Push the adjacent tile
+            } // End if the new x is within bounds and the tile has not been hit
+        }); // End for each direction
 
-        return adjacentTiles;
-    }
+        return adjacentTiles; // Return the adjacent tiles
+    } // End getAdjacentTiles
     //if a miss is achieved while trying to sink a ship, the direction of attack will be changed. Used in medium difficulty
-    determineDirection(fromTile, toTile) {
-        if (fromTile.x === toTile.x) {
-            if (fromTile.y < toTile.y) return "down";
-            else return "up";
-        }
-        if (fromTile.y === toTile.y) {
-            if (fromTile.x < toTile.x) return "right";
-            else return "left";
-        }
-        return null;
-    }
+    determineDirection(fromTile, toTile) { // Determine the direction
+        if (fromTile.x === toTile.x) { // If the x coordinates are equal
+            if (fromTile.y < toTile.y) return "down"; // If the y coordinate is greater
+            else return "up"; // If the y coordinate is less
+        } // End if the x coordinates are equal
+        if (fromTile.y === toTile.y) { // If the y coordinates are equal
+            if (fromTile.x < toTile.x) return "right"; // If the x coordinate is greater
+            else return "left"; // If the x coordinate is less
+        } // End if the y coordinates are equal
+        return null; // Return null
+    } // End determineDirection
     //maps the ship name to the length of the ship. Used in medium difficulty
-    shipLengthRetriever(shipID) {
-        if (shipID == 'Destroyer') {
-            return 1;
-        }
-        else if (shipID == 'Submarine') {
-            return 2;
-        }
-        else if (shipID == 'Cruiser') {
-            return 3;
-        }
-        else if (shipID == 'Battleship') {
-            return 4;
-        }
-        else if (shipID == 'Carrier') {
-            return 5;
-        }
-    }
+    shipLengthRetriever(shipID) { // Get the ship length
+        if (shipID == 'Destroyer') { // If the ship ID is destroyer
+            return 1; // Return 1
+        } // End if the ship ID is destroyer
+        else if (shipID == 'Submarine') { // If the ship ID is submarine
+            return 2;  // Return 2
+        } // End if the ship ID is submarine
+        else if (shipID == 'Cruiser') { // If the ship ID is cruiser
+            return 3; // Return 3
+        } // End if the ship ID is cruiser
+        else if (shipID == 'Battleship') { // If the ship ID is battleship
+            return 4; // Return 4
+        } // End if the ship ID is battleship
+        else if (shipID == 'Carrier') { // If the ship ID is carrier
+            return 5; // Return 5
+        } // End if the ship ID is carrier
+    } // End shipLengthRetriever
     //creates an array of all coordinates that are hits, used in hard difficulty
-    targetShipTiles(opMap) {
+    targetShipTiles(opMap) { // Target the ship tiles
         // If the target list is empty, we need to scan the grid and populate it
-        for (let x = 0; x < this.gridDimensions[0]; x++) {
-            for (let y = 0; y < this.gridDimensions[1]; y++) {
-                let cell = opMap.Map[x][y];
-                if (cell.shipId !== null && !cell.isHit) {
+        for (let x = 0; x < this.gridDimensions[0]; x++) { // For x in the grid dimensions
+            for (let y = 0; y < this.gridDimensions[1]; y++) { // For y in the grid dimensions
+                let cell = opMap.Map[x][y]; // Set the cell
+                if (cell.shipId !== null && !cell.isHit) { // If the cell has a ship ID and has not been hit
                     this.aiTargetList.push({ x: x, y: y }); // Save ship tile to the target list
-                }
-            }
-        }
-    }
+                } // End if the cell has a ship ID and has not been hit
+            } // End for y in the grid dimensions
+        } // End for x in the grid dimensions
+    } // End targetShipTiles
 
     //attempts to fire at a target
-    attemptFire(x, y, targetPlayer, sourcePlayer) {
-        if (this.maps[targetPlayer] == undefined) { //no player
-            return [false, "UndefinedPlayer"];
-        }
+    attemptFire(x, y, targetPlayer, sourcePlayer) { // Attempt to fire
+        if (this.maps[targetPlayer] == undefined) { //no player found
+            return [false, "UndefinedPlayer"]; // Return false
+        } // End if the player is undefined
 
-        if (x < 0 || y < 0 || x >= this.gridDimensions || y >= this.gridDimensions) { //out of bounds
-            return [false, "BoundsRejection"];
-        }
+        if (x < 0 || y < 0 || x >= this.gridDimensions || y >= this.gridDimensions) { //out of bounds check
+            return [false, "BoundsRejection"]; // Return false
+        } // End if the coordinates are out of bounds
 
         if (!this.guessHistory[sourcePlayer]) { //if no guess history, make a new guest history
-            this.guessHistory[sourcePlayer] = [];
-        }
+            this.guessHistory[sourcePlayer] = []; // Set the guess history
+        } // End if there is no guess history
 
         this.guessHistory[sourcePlayer].push({ targetPlayer: targetPlayer, x: x, y: y }); //add guess
 
         const mapSquareData = this.maps[targetPlayer].Map[x][y]; //pulls a specific square from Map data struct
 
         if (mapSquareData === undefined || mapSquareData.isHit) { // if this space has been hit
-            return [false, "InvalidGuess"]
-        }
+            return [false, "InvalidGuess"] // Return false
+        } // End if the space has been hit
 
         if (mapSquareData.shipId === null || mapSquareData.shipId === undefined) { //checks to see if the space has not been hit and if there is no ship
-            mapSquareData.isHit = true;
-            return [false, "TrueMiss"];
-        }
+            mapSquareData.isHit = true; // Set the square to hit
+            return [false, "TrueMiss"]; // Return false
+        } // End if the space has not been hit and there is no ship
 
-        const hitShipObject = this.maps[targetPlayer].Ships[mapSquareData.shipId];
+        const hitShipObject = this.maps[targetPlayer].Ships[mapSquareData.shipId]; // Set the hit ship object
 
         if (hitShipObject === null || hitShipObject.IsSunk || mapSquareData.isHit) { //if bad guess
-            return [false, "InvalidGuess"];
-        }
+            return [false, "InvalidGuess"]; // Return false
+        } // End if the guess is invalid
 
         // The ship was hit!
-        this.maps[targetPlayer].Map[x][y].isHit = true;
+        this.maps[targetPlayer].Map[x][y].isHit = true; // Set the square to hit
 
-        let isShipSunk = true;
+        let isShipSunk = true; // Set the ship to sunk
         hitShipObject.Definition.forEach(coordinate => { //checks to see if a ship was sunk
-            if (this.maps[targetPlayer].Map[coordinate.x][coordinate.y].isHit === false) {
-                isShipSunk = false;
-            }
-        });
+            if (this.maps[targetPlayer].Map[coordinate.x][coordinate.y].isHit === false) { // If the ship has not been hit
+                isShipSunk = false; // Set the ship to not sunk
+            } // End if the ship has not been hit
+        }); // End for each coordinate
 
-        this.maps[targetPlayer].Ships[mapSquareData.shipId].IsSunk = isShipSunk;
+        this.maps[targetPlayer].Ships[mapSquareData.shipId].IsSunk = isShipSunk; // Set the ship to sunk
 
         if (isShipSunk) { //if it is sunk, check to see if the whole ship if sunk. if so, check win condition.
-            let didSourcePlayerWinGame = true;
-            for (let shipID in this.maps[targetPlayer].Ships) {
-                if (this.maps[targetPlayer].Ships.hasOwnProperty(shipID)) {
-                    let shipObject = this.maps[targetPlayer].Ships[shipID];
-                    if (shipObject.IsSunk === false) {
-                        didSourcePlayerWinGame = false;
-                    }
-                }
-            }
+            let didSourcePlayerWinGame = true; // Set the source player to win the game
+            for (let shipID in this.maps[targetPlayer].Ships) { // If the ship ID is in the map
+                if (this.maps[targetPlayer].Ships.hasOwnProperty(shipID)) { // If the ship ID is in the map
+                    let shipObject = this.maps[targetPlayer].Ships[shipID]; // Set the ship object
+                    if (shipObject.IsSunk === false) { // If the ship is not sunk
+                        didSourcePlayerWinGame = false; // Set the source player to not win the game
+                    } // End if the ship is not sunk
+                } // End if the ship ID is in the map
+            } // End for each ship ID
 
-            if (didSourcePlayerWinGame) {
-                return [true, "GameWin"]
-            }
-        }
+            if (didSourcePlayerWinGame) { // If the source player wins the game
+                return [true, "GameWin"] // Return true
+            } // End if the source player wins the game
+        } // End if the ship is sunk
 
-        return [true, "TrueHit", isShipSunk, hitShipObject]
+        return [true, "TrueHit", isShipSunk, hitShipObject] // Return true
 
-    }
+    } // End attemptFire
 
-}
+} // End BattleshipRound class
 
-module.exports = [BattleshipRound, AIPlayer, NO_AI, EASY, MEDIUM, HARD];
+module.exports = [BattleshipRound, AIPlayer, NO_AI, EASY, MEDIUM, HARD]; // Export the BattleshipRound class

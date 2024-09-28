@@ -1,6 +1,6 @@
 {
     "DevServerAddress": "http://127.0.0.1:5100",
     "LiveServerAddress": "https://battleship-q6f4.onrender.com",
-    "Build": "Live",
-    "ClientId": 12345678910111213141516171819202
+    "Build": "dev",
+    "ClientId": null
 }
