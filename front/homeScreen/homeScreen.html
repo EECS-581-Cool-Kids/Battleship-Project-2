@@ -7,280 +7,280 @@ Authors: Katie Golder, William Johnson
 Creation date: 9-10-24
 -->
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html>  <!-- This is the home screen that will be served by the server to the player -->
+<html lang="en"> <!-- in english -->
+<head> <!-- head tag -->
     <script src="../assets/connection.js"></script> <!--Connects to server-->
-    <title>Begin Battleship Game</title>
-    <h1>Let's Play Battleship</h1>
+    <title>Begin Battleship Game</title> <!-- title of the page -->
+    <h1>Let's Play Battleship</h1> <!-- title of the page -->
     <link rel="stylesheet" href="styleHomeScreen.css"> <!--Adds style using css file-->
-</head>
+</head> <!-- end of head tag -->
 
-<body>
+<body> <!-- body tag -->
     <!--Communicates to user that they are waiting on connection to server-->
-    <div id="loading">
-        <h3>Waiting for Battleship Server...</h3>
-        <p>If this message persists, please make sure that you are running the battleship server program on the local computer, and that the config "Build" value is set to "Dev".</p>
-    </div>
+    <div id="loading"> <!-- loading screen -->
+        <h3>Waiting for Battleship Server...</h3> <!-- waiting for server -->
+        <p>If this message persists, please make sure that you are running the battleship server program on the local computer, and that the config "Build" value is set to "Dev".</p> <!-- troubleshooting -->
+    </div> <!-- end of loading screen -->
 
     <!--Create buttons for player to start or join a game which activates that respective function-->
-    <div id="buttons" style="width: 300px; margin: auto; display:none;">
-        <button id="1PGameButton">Start 1 Player Game</button>
-        <button id="2PGameButton">Start 2 Player Game</button>
-        <button id="joinGameButton">Join 2 Player Game</button>
-    </div>
-</body>
+    <div id="buttons" style="width: 300px; margin: auto; display:none;"> <!-- buttons for the player to start or join a game -->
+        <button id="1PGameButton">Start 1 Player Game</button> <!-- button to start a 1 player game -->
+        <button id="2PGameButton">Start 2 Player Game</button> <!-- button to start a 2 player game -->
+        <button id="joinGameButton">Join 2 Player Game</button> <!-- button to join a 2 player game -->
+    </div> <!-- end of buttons -->
+</body> <!-- end of body tag -->
 
 <!--Forms to get the player's input of number of ships to play with if playing single player, hosting a 2-player game, and join code if joining a game-->
-<form id="new1PGame" style="display:none">
-    <p>Number of Ships</p>
-    <div class="ship_select1P" style="width: 300px; margin: 0 auto; ">
-        <input type="radio" id="1P1" name="ship_select1P" value="1" required>
-        <label for="1P1">1</label><br>
-        <input type="radio" id="2P1" name="ship_select1P" value="2" required>
-        <label for="2P1">2</label><br>
-        <input type="radio" id="3P1" name="ship_select1P" value="3" required>
-        <label for="3P1">3</label><br>
-        <input type="radio" id="4P1" name="ship_select1P" value="4" required>
-        <label for="4P1">4</label><br>
+<form id="new1PGame" style="display:none"> <!-- form for the 1 player game -->
+    <p>Number of Ships</p> <!-- number of ships -->
+    <div class="ship_select1P" style="width: 300px; margin: 0 auto; "> <!-- radio buttons for the number of ships -->
+        <input type="radio" id="1P1" name="ship_select1P" value="1" required> <!-- radio button for 1 ship -->
+        <label for="1P1">1</label><br> <!-- label for 1 ship -->
+        <input type="radio" id="2P1" name="ship_select1P" value="2" required> <!-- radio button for 2 ships -->
+        <label for="2P1">2</label><br> <!-- label for 2 ships -->
+        <input type="radio" id="3P1" name="ship_select1P" value="3" required> <!-- radio button for 3 ships -->
+        <label for="3P1">3</label><br> <!-- label for 3 ships -->
+        <input type="radio" id="4P1" name="ship_select1P" value="4" required> <!-- radio button for 4 ships -->
+        <label for="4P1">4</label><br> <!-- label for 4 ships -->
         <input type="radio" id="5P1" name="ship_select1P" value="5" required checked> <!--Default value. Mostly to see the difference between P1 and P2 button selections-->
-        <label for="5P1">5</label><br>
-    </div>
+        <label for="5P1">5</label><br> <!-- label for 5 ships -->
+    </div> <!-- end of ship select -->
 
     <!-- Buttons for selecting difficulty level -->
-    <p>Select Difficulty</p>
-    <div class="difficulty_select1P" style="width: 300px; margin: 0 auto;">
-        <input type="radio" id="easy1P" name="difficulty_select1P" value="easy" required>
-        <label for="easy1P">Easy</label><br>
-        <input type="radio" id="medium1P" name="difficulty_select1P" value="medium" required checked>
-        <label for="medium1P">Medium</label><br>
-        <input type="radio" id="hard1P" name="difficulty_select1P" value="hard" required>
-        <label for="hard1P">Hard</label><br>
-    </div>
+    <p>Select Difficulty</p> <!-- difficulty level -->
+    <div class="difficulty_select1P" style="width: 300px; margin: 0 auto;"> <!-- radio buttons for the difficulty level -->
+        <input type="radio" id="easy1P" name="difficulty_select1P" value="easy" required> <!-- radio button for easy -->
+        <label for="easy1P">Easy</label><br> <!-- label for easy -->
+        <input type="radio" id="medium1P" name="difficulty_select1P" value="medium" required checked> <!--Default value. Mostly to see the difference between P1 and P2 button selections-->
+        <label for="medium1P">Medium</label><br> <!-- label for medium -->
+        <input type="radio" id="hard1P" name="difficulty_select1P" value="hard" required> <!-- radio button for hard -->
+        <label for="hard1P">Hard</label><br> <!-- label for hard -->
+    </div> <!-- end of difficulty select -->
 
     <!-- Centering and applying button styles -->
-    <div style="text-align: center; margin-top: 20px;">
-        <input id="start1PGameButton" class="styled-button" type="button" value="Play">
-    </div>
-</form>
-    </form>
-<form id="new2PGame" style="display:none">
+    <div style="text-align: center; margin-top: 20px;"> <!-- centering and applying button styles -->
+        <input id="start1PGameButton" class="styled-button" type="button" value="Play"> <!-- button to start the 1 player game -->
+    </div> <!-- end of centering and applying button styles -->
+</form> <!-- end of form -->
+    </form> <!-- end of form -->
+<form id="new2PGame" style="display:none">  <-!-- form for the 2 player game -->
     <!--Player is creating game and will redirect to game once number of ships is selected using radio buttons-->
-    <p>Number of Ships</p>
-    <div class="ship_select" style="width: 300px; margin: 0 auto; ">
+    <p>Number of Ships</p> <!-- number of ships -->
+    <div class="ship_select" style="width: 300px; margin: 0 auto; ">  <!-- radio buttons for the number of ships -->
         <!--Unites radio buttons to match style and same class-->
-        <input type="radio" id="1" name="ship_select" value="1" required>
-        <label for="1">1</label><br>
-        <input type="radio" id="2" name="ship_select" value="2" required>
-        <label for="2">2</label><br>
-        <input type="radio" id="3" name="ship_select" value="3" required checked>
-        <label for="3">3</label><br>
-        <input type="radio" id="4" name="ship_select" value="4" required>
-        <label for="4">4</label><br>
-        <input type="radio" id="5" name="ship_select" value="5" required>
-        <label for="5">5</label><br>
+        <input type="radio" id="1" name="ship_select" value="1" required> <!-- radio button for 1 ship -->
+        <label for="1">1</label><br> <!-- label for 1 ship -->
+        <input type="radio" id="2" name="ship_select" value="2" required> <!-- radio button for 2 ships -->
+        <label for="2">2</label><br> <!-- label for 2 ships -->
+        <input type="radio" id="3" name="ship_select" value="3" required checked> <!--Default value. Mostly to see the difference between P1 and P2 button selections-->
+        <label for="3">3</label><br> <!-- label for 3 ships -->
+        <input type="radio" id="4" name="ship_select" value="4" required> <!-- radio button for 4 ships -->
+        <label for="4">4</label><br> <!-- label for 4 ships -->
+        <input type="radio" id="5" name="ship_select" value="5" required> <!-- radio button for 5 ships -->
+        <label for="5">5</label><br> <!-- label for 5 ships -->
         <input id="createPartyButton" type="button" value="Play"> <!--Submits number of ships and starts game-->
-    </div>
-</form>
+    </div> <!-- end of ship select -->
+</form> <!-- end of form -->
 
 <!--Player is joining Game and will redirect to game once code is entered-->
-<div id="joinGame" style="display:none; text-align: center;">
-    <p>Join Code</p>
-    <input id="joinCodeField" type="text" name="enterCode" required>
-    <input id="joinPartyButton" type="submit" value="Play" style="width: 300px; margin: 0 auto;">
-</div>
+<div id="joinGame" style="display:none; text-align: center;"> <!-- form for the join game -->
+    <p>Join Code</p> <!-- join code -->
+    <input id="joinCodeField" type="text" name="enterCode" required> <!-- input field for the join code -->
+    <input id="joinPartyButton" type="submit" value="Play" style="width: 300px; margin: 0 auto;"> <!-- button to join the game -->
+</div> <!-- end of join game -->
 
-<!--Displays unique code for oponents to join the same game -->
-<div id="displayPartyCode" style="display:none">
-    <h3>Party Code</h3>
-    <p>Share this code with your oponent so they can join the round!</p>
-    <h2 id="partyCode">[Loading...]</h2>
-</div>
+<!--Displays unique code for opponents to join the same game -->
+<div id="displayPartyCode" style="display:none"> <!-- display party code -->
+    <h3>Party Code</h3> <!-- party code -->
+    <p>Share this code with your oponent so they can join the round!</p> <!-- share the code with the opponent -->
+    <h2 id="partyCode">[Loading...]</h2> <!-- party code -->
+</div> <!-- end of display party code -->
 
 <!--Only displays for joining player while waiting on host -->
-<div id="waitingForHost" style="display:none">
-    <h3>Waiting for Host...</h3>
-    <p>You've joined a party! We're now waiting for the host to start the game...</p>
-</div>
+<div id="waitingForHost" style="display:none"> <!-- waiting for host -->
+    <h3>Waiting for Host...</h3> <!-- waiting for host -->
+    <p>You've joined a party! We're now waiting for the host to start the game...</p> <!-- waiting for the host to start the game -->
+</div> <!-- end of waiting for host -->
 
 <!--Only shows for Host to begin game with opponent connected-->
-<div id="startButton" style="width: 300px; margin: auto; display:none; text-align:center;">
-    <button id="startGameButton">Start Game!</button>
-</div>
+<div id="startButton" style="width: 300px; margin: auto; display:none; text-align:center;"> <!-- start button -->
+    <button id="startGameButton">Start Game!</button> <!-- button to start the game -->
+</div> <!-- end of start button -->
 
 <!--Shows while game is beginning-->
-<p id="loadingGameScreen" style="display:none">Beginning Round...</p>
+<p id="loadingGameScreen" style="display:none">Beginning Round...</p> <!-- beginning round -->
 
 <!--Shows if error is encountered-->
-<div class="error-footer" id="errorFooter">
-    <p id="errorLabel">Error: Something went wrong. Please try again later.</p>
-</div>
+<div class="error-footer" id="errorFooter"> <!-- error footer -->
+    <p id="errorLabel">Error: Something went wrong. Please try again later.</p> <!-- error label -->
+</div> <!-- end of error footer -->
 
 <!--Functions defining to show or hide the corresponding form per game mode selection -->
-<script>
-      document.addEventListener("DOMContentLoaded", function () {
+<script> //Javascript to handle the front end of the home screen
+      document.addEventListener("DOMContentLoaded", function () { //Waits for the page to load before running the script
           function waitForSocket(callback) {
-              if (window.socket) {
-                  callback();
-              } else {
-                  setTimeout(() => waitForSocket(callback), 100);
-              }
-          }
+              if (window.socket) { //Checks if the socket is connected
+                  callback(); //If connected, runs the callback function
+              } else { //If not connected, waits 100ms and tries again
+                  setTimeout(() => waitForSocket(callback), 100); //Waits 100ms and tries again
+              } //End of if statement
+          } //End of function
 
-          waitForSocket(() => {
+          waitForSocket(() => {  //Waits for the socket to connect before running the script
             //Creating needed html elements to communicate between the server and users
-            const new1PGameArea = document.getElementById("new1PGame");
-            const new2PGameArea = document.getElementById("new2PGame");
-            const joinGameArea = document.getElementById("joinGame");
-            const partyCodeArea = document.getElementById("displayPartyCode");
-            const buttonsArea = document.getElementById("buttons");
-            const loadingArea = document.getElementById("loading");
-            const waitingArea = document.getElementById("waitingForHost");
-            const startGameArea = document.getElementById("startButton");
+            const new1PGameArea = document.getElementById("new1PGame");  //Gets the element with the id new1PGame
+            const new2PGameArea = document.getElementById("new2PGame"); //Gets the element with the id new2PGame
+            const joinGameArea = document.getElementById("joinGame") //Gets the element with the id joinGame
+            const partyCodeArea = document.getElementById("displayPartyCode"); //Gets the element with the id displayPartyCode
+            const buttonsArea = document.getElementById("buttons"); //Gets the element with the id buttons
+            const loadingArea = document.getElementById("loading"); //Gets the element with the id loading
+            const waitingArea = document.getElementById("waitingForHost"); //Gets the element with the id waitingForHost
+            const startGameArea = document.getElementById("startButton"); //Gets the element with the id startButton
 
-            const onePGameButton = document.getElementById("1PGameButton");
-            const twoPGameButton = document.getElementById("2PGameButton");
-            const joinGameButton = document.getElementById("joinGameButton");
-            const createPartyButton = document.getElementById("createPartyButton");
-            const start1PGameButton = document.getElementById("start1PGameButton");
-            const joinPartyButton = document.getElementById("joinPartyButton");
-            const startGameButton = document.getElementById("startGameButton");
+            const onePGameButton = document.getElementById("1PGameButton"); //Gets the element with the id 1PGameButton
+            const twoPGameButton = document.getElementById("2PGameButton"); //Gets the element with the id 2PGameButton
+            const joinGameButton = document.getElementById("joinGameButton"); //Gets the element with the id joinGameButton
+            const createPartyButton = document.getElementById("createPartyButton"); //Gets the element with the id createPartyButton
+            const start1PGameButton = document.getElementById("start1PGameButton"); //Gets the element with the id start1PGameButton
+            const joinPartyButton = document.getElementById("joinPartyButton"); //Gets the element with the id joinPartyButton
+            const startGameButton = document.getElementById("startGameButton"); //Gets the element with the id startGameButton
 
-            const partyCodeLabel = document.getElementById("partyCode");
-            const joinCodeField = document.getElementById("joinCodeField");
-            const loadingGameLabel = document.getElementById("loadingGameScreen");
+            const partyCodeLabel = document.getElementById("partyCode"); //Gets the element with the id partyCode
+            const joinCodeField = document.getElementById("joinCodeField"); //Gets the element with the id joinCodeField
+            const loadingGameLabel = document.getElementById("loadingGameScreen"); //Gets the element with the id loadingGameScreen
 
-            const errorFooterArea = document.getElementById("errorFooter");
-            const errorLabel = document.getElementById("errorLabel");
+            const errorFooterArea = document.getElementById("errorFooter"); //Gets the element with the id errorFooter
+            const errorLabel = document.getElementById("errorLabel"); //Gets the element with the id errorLabel
 
             loadingArea.style.display = "none"; //We are now loaded so we can hide these
-            buttonsArea.style.display = "block";
+            buttonsArea.style.display = "block";  //We are now loaded so we can show these
 
             const radios = document.getElementsByName('ship_select');//Checks what number of ships the host chose
-            const radios1P = document.getElementsByName('ship_select1P');
-            const difficultyRadios = document.getElementsByName('difficulty_select1P');
+            const radios1P = document.getElementsByName('ship_select1P');  //Checks what number of ships the host chose
+            const difficultyRadios = document.getElementsByName('difficulty_select1P'); //Checks what difficulty level the host chose
 
               function new1PGame() {//Function runs when 1P game button is selected
-                new1PGameArea.style.display = "block";
-                new2PGameArea.style.display = "none";
-                joinGameArea.style.display = "none";
-                errorFooterArea.style.display = "none";
-                }
+                new1PGameArea.style.display = "block"; //Shows the 1P game form
+                new2PGameArea.style.display = "none"; //Hides the 2P game form
+                joinGameArea.style.display = "none"; //Hides the join game form
+                errorFooterArea.style.display = "none"; //Hides the error footer
+                } //End of function
 
             function new2PGame() {//Function runs when 2P game button is selected
-              new1PGameArea.style.display = "none";
-              new2PGameArea.style.display = "block";
-              joinGameArea.style.display = "none";
-              errorFooterArea.style.display = "none";
-            }
+              new1PGameArea.style.display = "none"; //Hides the 1P game form
+              new2PGameArea.style.display = "block"; //Shows the 2P game form
+              joinGameArea.style.display = "none"; //Hides the join game form
+              errorFooterArea.style.display = "none"; //Hides the error footer
+            } //End of function
 
             onePGameButton.addEventListener('click', () => { //Waits for 1P button to be pressed to run function
-              new1PGame();
-            });
+              new1PGame(); //Runs the function
+            }); //End of event listener
 
             twoPGameButton.addEventListener('click', () => { //Waits for 2P button to be pressed to run function
-              new2PGame();
-            });
+              new2PGame(); //Runs the function
+            }); //End of event listener
 
             start1PGameButton.addEventListener('click', () => { // When the Play button is pressed after selecting number of ships for a 1P game, sends request to server to start a 1P game
                 let numberOfShips = 5; //Default ship value.
 
                 //Loops through the radio buttons to find the checked one
-                for (const radio of radios1P) {
-                  if (radio.checked) {
+                for (const radio of radios1P) { //Loops through the radio buttons to find the checked one
+                  if (radio.checked) { //If the radio button is checked
                     numberOfShips = radio.value; //Stores the value of selected radio button for number of ships
-                    break;
-                  }
-                }
-                for (const radio of difficultyRadios) {
-                  if (radio.checked) {
+                    break; //Breaks the loop
+                  } //End of if statement
+                } //End of for loop
+                for (const radio of difficultyRadios) { //Loops through the radio buttons to find the checked one
+                  if (radio.checked) { //If the radio button is checked
                     difficultyLevel = radio.value; //Stores the value of selected radio button for number of ships
-                    break;
-                  }
-                }
+                    break; //Breaks the loop
+                  } //End of if statement
+                } //End of for loop
                 socket.emit('initiateSinglePlayer', numberOfShips, difficultyLevel); //Sends the number of ships selected to the server to try to create the game
-                });
+                }); //End of event listener
 
             createPartyButton.addEventListener('click', () => { //Sends request
               let numberOfShips = 3; //Default ship value
 
               //Loops through the radio buttons to find the checked one
-              for (const radio of radios) {
-                if (radio.checked) {
+              for (const radio of radios) { //Loops through the radio buttons to find the checked one
+                if (radio.checked) { //If the radio button is checked
                   numberOfShips = radio.value; //Stores the value of selected radio button for number of ships
-                  break;
-                }
-              }
+                  break; //Breaks the loop
+                } //End of if statement
+              } //End of for loop
               //All socket.emit statments take (A server functionName, Data to send)
               socket.emit('tryCreateParty', numberOfShips); //Sends the number of ships selected to the server to try to create the game
-            });
+            }); //End of event listener
 
             socket.on('createParty', (data) => { //Loads display for creating game
-              if (data.status == "Success"){
-                newGameArea.style.display = "none";
-                buttonsArea.style.display = "none";
-                partyCodeLabel.textContent = data.matchId;
-                partyCodeArea.style.display = "block";
+              if (data.status == "Success"){ //Runs if game creation is successful
+                newGameArea.style.display = "none"; //Hides the new game area
+                buttonsArea.style.display = "none"; //Hides the buttons area
+                partyCodeLabel.textContent = data.matchId; //Displays the party code
+                partyCodeArea.style.display = "block"; //Shows the party code area
               } else {//Runs if game creation encounters error
-                errorLabel.textContent = "Failed to Create Party: " + data.reason;
-                errorFooterArea.style.display = "block";
-                newGameArea.style.display = "none";
-              }
-            });
+                errorLabel.textContent = "Failed to Create Party: " + data.reason; //Displays error message
+                errorFooterArea.style.display = "block"; //Shows the error footer
+                newGameArea.style.display = "none"; //Hides the new game area
+              } //End of if statement
+            }); //End of socket.on
 
             function joinGame() { //Function runs when join game button is selected
-              document.getElementById("joinGame").style.display = "block";
-              document.getElementById("newGame").style.display = "none";
-              errorFooterArea.style.display = "none";
-            }
+              document.getElementById("joinGame").style.display = "block"; //Shows the join game form
+              document.getElementById("newGame").style.display = "none"; //Hides the new game form
+              errorFooterArea.style.display = "none"; //Hides the error footer
+            } //End of function
 
             joinGameButton.addEventListener('click', () => { //Waits for join game button to be pressed to run function
-              joinGame();
-            });
+              joinGame(); //Runs the function
+            }); //End of event listener
 
             joinPartyButton.addEventListener('click', () => { //Sends request
-              socket.emit('tryJoinParty', joinCodeField.value);
-            });
+              socket.emit('tryJoinParty', joinCodeField.value); //Sends the join code to the server to try to join the game
+            }); //End of event listener
 
             socket.on('joinParty', (data) => { //Loads display for joining game
-                if (data.status == "Success"){
-                  joinGameArea.style.display = "none";
-                  buttonsArea.style.display = "none";
-                  waitingArea.style.display = "block";
+                if (data.status == "Success"){ //Runs if game joining is successful
+                  joinGameArea.style.display = "none"; //Hides the join game area
+                  buttonsArea.style.display = "none"; //Hides the buttons area
+                  waitingArea.style.display = "block"; //Shows the waiting area
                 } else {//Runs if game joining encounters error
-                  errorLabel.textContent = "Failed to Join Party: " + data.reason;
-                  errorFooterArea.style.display = "block";
-                  joinGameArea.style.display = "none";
-                }
-            });
+                  errorLabel.textContent = "Failed to Join Party: " + data.reason; //Displays error message
+                  errorFooterArea.style.display = "block"; //Shows the error footer
+                  joinGameArea.style.display = "none"; //Hides the join game area
+                } //End of if statement
+            }); //End of socket.on
 
             socket.on('opponentJoined', (data) => {//Updates display for when both users are connected to a game
-              if (data.status == "Success"){
-                partyCodeArea.style.display = "none";
-                startGameArea.style.display = "block";
-              }
-            });
+              if (data.status == "Success"){ //Runs if both users are connected
+                partyCodeArea.style.display = "none"; //Hides the party code area
+                startGameArea.style.display = "block"; //Shows the start game area
+              } //End of if statement
+            }); //End of socket.on
 
             startGameButton.addEventListener('click', () => { //Waits for host press start game button
-              startGameArea.style.display = "none";
-              socket.emit('tryStartRound', {});
-            });
+              startGameArea.style.display = "none"; //Hides the start game area
+              socket.emit('tryStartRound', {}); //Sends request to server to start the game
+            }); //End of event listener
 
             socket.on('startRound', (data) => { //Runs when host starts round to redirect to main.html for the game to be played
-              if (data.status == "Success"){
-                waitingArea.style.display = "none";
-                loadingGameLabel.style.display = "block";
-                window.electronAPI.navigateToPage("./Grid Test/main.html");
+              if (data.status == "Success"){ //Runs if the game starts successfully
+                waitingArea.style.display = "none"; //Hides the waiting area
+                loadingGameLabel.style.display = "block"; //Shows the loading game label
+                window.electronAPI.navigateToPage("./Grid Test/main.html"); //Redirects to the game page
               } else { //Runs if an error is encountered
-                errorLabel.textContent = "Fatal Error: Failed to Start Round: " + data.reason;
-                errorFooterArea.style.display = "block";
-                startGameArea.style.display = "none";
-              }
-            });
-          });
-      });
-</script>
+                errorLabel.textContent = "Fatal Error: Failed to Start Round: " + data.reason; //Displays error message
+                errorFooterArea.style.display = "block"; //Shows the error footer
+                startGameArea.style.display = "none"; //Hides the start game area
+              } //End of if statement
+            }); //End of socket.on
+          }); //End of waitForSocket
+      }); //End of document.addEventListener
+</script> <!-- end of script -->
 
-</body>
-</html>
+</body> <!-- end of body tag -->
+</html> <!-- end of html file -->
 
