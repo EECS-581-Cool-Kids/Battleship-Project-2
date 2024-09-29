@@ -1,42 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Socket Client Testing</title>
-    <script src="./connection.js"></script>
-</head>
-<body>
-    <h3>Real-time Update Testing</h3>
-    <div id="updates"></div>
-    <br><br>
-    <button id="sendMessageButton">Send Message</button>
+<!DOCTYPE html>  <-!- This is the html file that will be served by the server for testing the socket connection -->
+<html lang="en">  <-!- in english -->
+<head>  <-!- head tag -->
+    <title>Socket Client Testing</title>  <-!- title of the page -->
+    <script src="./connection.js"></script>  <-!- this is the script that will be run on the client side -->
+</head>  <-!- end of head tag -->
+<body>  <-!- body tag -->
+    <h3>Real-time Update Testing</h3>  <-!- heading -->
+    <div id="updates"></div>  <-!- this is the div that will be updated with the data from the server -->
+    <br><br>  <-!- break tags -->
+    <button id="sendMessageButton">Send Message</button>  <-!- button that will send a message to the server -->
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            function waitForSocket(callback) {
-                if (window.socket) {
-                    callback();
-                } else {
-                    setTimeout(() => waitForSocket(callback), 100);
-                }
-            }
+        document.addEventListener("DOMContentLoaded", function () { <!-- listens for the document to be loaded -->
+            function waitForSocket(callback) { <!-- this function will wait for the socket to be connected -->
+                if (window.socket) {  <!-- if the socket is connected -->
+                    callback();  <!-- run the callback function -->
+                } else {  <!-- if the socket is not connected -->
+                    setTimeout(() => waitForSocket(callback), 100);  <!-- wait for 100 milliseconds and then try again -->
+                }  <!-- end of if statement -->
+            }  <!-- end of function -->
     
-            waitForSocket(() => {
-                window.socket.on('update', (data) => {
-                    const updatesDiv = document.getElementById('updates');
-                    const newUpdate = document.createElement('p');
-                    newUpdate.textContent = `Received update: ${JSON.stringify(data)}`;
-                    updatesDiv.appendChild(newUpdate);
-                });
+            waitForSocket(() => {  <!-- this is the callback function that will be run when the socket is connected -->
+                window.socket.on('update', (data) => {  <!-- listens for the update event from the server -->
+                    const updatesDiv = document.getElementById('updates');  <!-- gets the updates div -->
+                    const newUpdate = document.createElement('p');  <!-- creates a new paragraph element -->
+                    newUpdate.textContent = `Received update: ${JSON.stringify(data)}`;  <!-- sets the text content of the paragraph element -->
+                    updatesDiv.appendChild(newUpdate);  <!-- appends the paragraph element to the updates div -->
+                });  <!-- end of event listener -->
     
-                document.getElementById('sendMessageButton').addEventListener('click', () => {
-                    window.socket.emit('tryCreateParty', 3);
-                });
+                document.getElementById('sendMessageButton').addEventListener('click', () => { <!-- listens for the click event on the send message button -->
+                    window.socket.emit('tryCreateParty', 3); <!-- sends a message to the server -->
+                }); <!-- end of event listener -->
 
-                window.socket.on('createParty', (data) => {
-                    console.log(data);
-                })
-            });
-        });
-    </script>
-    
-</body>
-</html>
+                window.socket.on('createParty', (data) => { <!-- listens for the createParty event from the server -->
+                    console.log(data); <!-- logs the data to the console -->
+                }); <!-- end of event listener -->
+            }); <!-- end of callback function -->
+        }); <!-- end of event listener -->
+    </script> <!-- end of script tag -->
+</body> <!-- end of body tag -->
+</html> <!-- end of html tag -->

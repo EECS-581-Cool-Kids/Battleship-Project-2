@@ -7,25 +7,25 @@ Authors: William Johnson
 Creation date: 9-10-24
 */
 
-const express = require('express');
-const http = require('http');
-const path = require('path');
-const bodyParser = require('body-parser');
+const express = require('express'); // Import the express library
+const http = require('http'); // Import the http library
+const path = require('path'); // Import the path library
+const bodyParser = require('body-parser'); // Import the body-parser library
 
-const app = express();
-const server = http.createServer(app);
+const app = express(); // Create an express app
+const server = http.createServer(app); // Create a server using the express app
 
-app.use(bodyParser.json());
+app.use(bodyParser.json()); // Use the body-parser library to parse JSON
 
-app.use(express.static(path.join(__dirname, 'assets')));
+app.use(express.static(path.join(__dirname, 'assets'))); // Serve the assets directory
 
-const port = 3000;
-const localNetworkHost = '0.0.0.0';
+const port = 3000; // The port the server will listen on
+const localNetworkHost = '0.0.0.0'; // The host the server will listen on
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'assets', 'serverSocketTesting.html'));
-});
+app.get('/', (req, res) => { // When a request is made to the root
+    res.sendFile(path.join(__dirname, 'assets', 'serverSocketTesting.html')); // Send the serverSocketTesting.html file
+}); // End when a request is made to the root
 
-server.listen(port, localNetworkHost, () => {
-    console.log(`Server Tester is now active on http://${localNetworkHost}:${port}`);
-});
+server.listen(port, localNetworkHost, () => { // Listen on the specified port and host
+    console.log(`Server Tester is now active on http://${localNetworkHost}:${port}`); // Log that the server is active
+}); // End listen on the specified port and host
