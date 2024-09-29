@@ -36,10 +36,10 @@ class Map {
      */
 
     //takes dimensions in [x, y] format
-    constructor(dimensions){
+    constructor(dimensions) {
         console.log(dimensions[0]);
         this.dimensions = dimensions
-        
+
         /** @type {Object.<number, Object.<number, CellData>>} */
         this.Map = {};
         /** @type {Object.<number, Ship>} */
@@ -54,18 +54,18 @@ class Map {
             this.Map[i] = row;
         }
     }
-    
+
     /**
      * @param {int} shipId - number 1-5
      * @param {Coordinate[]} shipDefinition - array of coordinates, length should be equal to shipId.
      */
-    addShip(shipId, shipDefinition){
+    addShip(shipId, shipDefinition) {
         this.Ships[shipId] = {}
         this.Ships[shipId].Definition = shipDefinition;
         this.Ships[shipId].IsSunk = false;
-        
+
         shipDefinition.forEach(coordinate => { //coordinate should be an array, so runs through each
-            if (this.Map[coordinate.x] === undefined){
+            if (this.Map[coordinate.x] === undefined) {
                 this.Map[coordinate.x] = {};
             }
             this.Map[coordinate.x][coordinate.y] = { shipId: shipId, isHit: false };
@@ -77,10 +77,10 @@ class Map {
      * @param {Coordinate[]} shipDefinition 
      * @returns {boolean} returns if the ship placement would be valid.
      */
-    isValid(shipDefinition){
+    isValid(shipDefinition) {
         shipDefinition.forEach(coordinate => { //coordinate should be an array, so runs through each
             if (this.Map[coordinate.x][coordinate.y].shipId == null) {
-              return false;
+                return false;
             }
         });
         return true;
@@ -92,13 +92,13 @@ class Map {
     addAIShip(shipId) {
         const horizontal = (Math.random() >= 0.5)
         while (1) {
-          
-            let x = Math.trunc(Math.random() * (this.dimensions[0]-1));
-            let y = Math.trunc(Math.random() * (this.dimensions[1]-1));
-            
+
+            let x = Math.trunc(Math.random() * (this.dimensions[0] - 1));
+            let y = Math.trunc(Math.random() * (this.dimensions[1] - 1));
+
             /** @type {Coordinate[]} */
             let coordinates = [];
-            
+
             for (let i = 0; i < shipId; i++) {
                 if (horizontal) {
                     let _x;
@@ -107,7 +107,7 @@ class Map {
                     } else {
                         _x = x + i
                     }
-                    coordinates.push({x:_x, y:y})
+                    coordinates.push({ x: _x, y: y })
                 } else {
                     let _y;
                     if (y + i >= 10) {
@@ -115,9 +115,9 @@ class Map {
                     } else {
                         _y = y + i;
                     }
-                    coordinates.push({x:x,y:_y});
+                    coordinates.push({ x: x, y: _y });
                 }
-                
+
             }
             if (this.isValid(coordinates)) {
                 this.addShip(shipId, coordinates)
@@ -130,7 +130,7 @@ class Map {
 //data structure for a battleship round
 class BattleshipRound {
     //takes host clientId, num of ships, grid dimensions for Maps
-    constructor(host, numberOfShips, gridDimensions){
+    constructor(host, numberOfShips, gridDimensions) {
         this.host = host;
         /** @type {number[]} */
         this.players = [];
@@ -142,52 +142,242 @@ class BattleshipRound {
         this.whosTurn = null;
         this.hasPlacedShips = {};
         this.aiType = NO_AI;
+        this.aiTargetList = [];
+        this.aiDirection = null; // Tracks the current direction (if any) for the AI to fire in
+        this.firstHit = null; // Tracks the last hit coordinate
+        this.currentTarget = null;
+        this.hitShipId = null;
+        this.hitCount = 0;
+        this.shipLength = 0
+
     }
     //adds player and attaches a map
-    addPlayer(clientId){
+    addPlayer(clientId) {
         this.players.push(clientId);
         this.maps[clientId] = new Map(this.gridDimensions);
     }
 
-    addAI(difficulty){
+    addAI(difficulty) {
         this.aiType = difficulty
         this.players.push(AIPlayer)
         this.maps[AIPlayer] = new Map(this.gridDimensions);
         for (let i = 0; i < this.numberOfShips; i++) {
-            this.maps[AIPlayer].addAIShip(i+1)
-            console.log("ship " + (i+1) + " added");
+            this.maps[AIPlayer].addAIShip(i + 1)
+            console.log("ship " + (i + 1) + " added");
         }
     }
     aiTurn() {
         const opMap = this.maps[this.host]
+
         if (this.aiType == EASY) {
-            while(1) {
+            while (1) {
                 let tile = this.randomTile();
                 if (!opMap.Map[tile.x][tile.y].isHit) {
                     return tile;
-                    
                 }
+            }
+        }
+        //medium difficulty: fires randomly until hit is achieved, then attacks orthogonally until ship is sunk
+        if (this.aiType === MEDIUM) {
+            // Continue firing in the determined direction if possible
+            if (this.aiDirection !== null && this.currentTarget !== null) {
+                if (this.hitCount < this.shipLength) {
+                    let nextTile = this.getNextTileInDirection(this.currentTarget, this.aiDirection, opMap);
+                    if (nextTile) {
+                        if (opMap.Map[nextTile.x][nextTile.y].shipId !== null) {
+                            this.currentTarget = nextTile;
+                            this.hitCount++;
+                            return nextTile;
+                        }
+                        else {
+                            // If direction no longer valid (e.g., out of bounds or miss), reset direction
+                            this.aiDirection = null;
+                            this.currentTarget = null;
+                        }
+                    }
+                }
+                else { //empty data for ship targeting process, reverts a to random targeting
+                    this.aiDirection = null;
+                    this.firstHit = null;
+                    this.currentTarget = null;
+                    this.hitShipId = null;
+                    this.hitCount = 0;
+                    this.shipLength = 0;
+                }
+            }
+            // Process first hit if it exists but no direction is set
+            if (this.firstHit !== null && this.aiDirection === null) {
+                if (this.hitCount < this.shipLength) {
+                    let adjTiles = this.getAdjacentTiles(this.firstHit.x, this.firstHit.y, opMap);
+                    for (let tile of adjTiles) {
+                        if (!opMap.Map[tile.x][tile.y].isHit) {
+                            if (opMap.Map[tile.x][tile.y].shipId !== null) {
+                                // Determine direction and continue firing
+                                this.hitCount++;
+                                this.aiDirection = this.determineDirection(this.firstHit, tile);
+                                this.currentTarget = tile; // Set current target to the newly hit tile
+                                return tile;
+                            } else {
+                                // If miss, mark the tile and return
+                                return tile;
+                            }
+                        }
+                    }
+                }
+                else { //empty data for ship targeting process, reverts a to random targeting
+                    this.aiDirection = null;
+                    this.firstHit = null;
+                    this.currentTarget = null;
+                    this.hitShipId = null;
+                    this.hitCount = 0;
+                    this.shipLength = 0;
+                }
+            }
+
+            // If no first hit, fire randomly to find a ship
+            while (this.firstHit === null) {
+                let tile = this.randomTile();
+                if (!opMap.Map[tile.x][tile.y].isHit) {
+                    if (opMap.Map[tile.x][tile.y].shipId !== null) {
+                        // If a ship is hit, record the first hit
+                        this.hitShipId = opMap.Map[tile.x][tile.y].shipId;
+                        this.shipLength = this.shipLengthRetriever(this.hitShipId);
+                        this.hitCount = 1;
+                        this.firstHit = tile;
+                        this.currentTarget = tile; // Set current target to the first hit tile
+                        return tile;
+                    }
+                    return tile;
+                }
+            }
+        }
+
+        // Hard difficulty logic: only target known ships
+        if (this.aiType === HARD) {
+            // Return the next tile from the target list
+            if (this.aiTargetList.length > 0) {
+                return this.aiTargetList.shift(); // Remove and return the next ship tile
+            } else {
+                this.targetShipTiles(opMap);
+                return this.aiTargetList.shift();
             }
         }
     }
     /**
      * @returns {Coordinate}
      */
-    randomTile() {
-        let x = Math.trunc(Math.random() * (this.gridDimensions[0] - 1));
-        let y = Math.trunc(Math.random() * (this.gridDimensions[1] - 1));
 
-        return {x:x, y:y}
+    //selects tile at random from grid to be targeted. Used in Easy and Medium difficulty
+    randomTile() {
+        let x = Math.trunc(Math.random() * (this.gridDimensions[0]));
+        let y = Math.trunc(Math.random() * (this.gridDimensions[1]));
+
+        return { x: x, y: y }
+    }
+    //aquires the next coordinate for targeting based on the existing direction of attack. Used in medium difficulty
+    getNextTileInDirection(fromTile, direction, opMap) {
+        let newX = fromTile.x;
+        let newY = fromTile.y;
+
+        switch (direction) {
+            case "left":
+                newX -= 1;
+                break;
+            case "right":
+                newX += 1;
+                break;
+            case "up":
+                newY -= 1;
+                break;
+            case "down":
+                newY += 1;
+                break;
+        }
+
+        if (
+            newX >= 0 && newX < this.gridDimensions[0] &&
+            newY >= 0 && newY < this.gridDimensions[1] &&
+            !opMap.Map[newX][newY].isHit
+        ) {
+            return { x: newX, y: newY };
+        }
+
+        return false;
+    }
+    //once first hit is score the tiles on every side of the first hit will be appended to a list for potential targeting, used in medium difficulty 
+    getAdjacentTiles(x, y, opMap) {
+        const directions = [
+            { dx: -1, dy: 0 }, // left
+            { dx: 1, dy: 0 },  // right
+            { dx: 0, dy: -1 }, // up
+            { dx: 0, dy: 1 }   // down
+        ];
+
+        let adjacentTiles = [];
+
+        directions.forEach(dir => {
+            let newX = x + dir.dx;
+            let newY = y + dir.dy;
+
+            if (newX >= 0 && newX < this.gridDimensions[0] &&
+                newY >= 0 && newY < this.gridDimensions[1] &&
+                !opMap.Map[newX][newY].isHit) {
+                adjacentTiles.push({ x: newX, y: newY });
+            }
+        });
+
+        return adjacentTiles;
+    }
+    //if a miss is achieved while trying to sink a ship, the direction of attack will be changed. Used in medium difficulty
+    determineDirection(fromTile, toTile) {
+        if (fromTile.x === toTile.x) {
+            if (fromTile.y < toTile.y) return "down";
+            else return "up";
+        }
+        if (fromTile.y === toTile.y) {
+            if (fromTile.x < toTile.x) return "right";
+            else return "left";
+        }
+        return null;
+    }
+    //maps the ship name to the length of the ship. Used in medium difficulty
+    shipLengthRetriever(shipID) {
+        if (shipID == 'Destroyer') {
+            return 1;
+        }
+        else if (shipID == 'Submarine') {
+            return 2;
+        }
+        else if (shipID == 'Cruiser') {
+            return 3;
+        }
+        else if (shipID == 'Battleship') {
+            return 4;
+        }
+        else if (shipID == 'Carrier') {
+            return 5;
+        }
+    }
+    //creates an array of all coordinates that are hits, used in hard difficulty
+    targetShipTiles(opMap) {
+        // If the target list is empty, we need to scan the grid and populate it
+        for (let x = 0; x < this.gridDimensions[0]; x++) {
+            for (let y = 0; y < this.gridDimensions[1]; y++) {
+                let cell = opMap.Map[x][y];
+                if (cell.shipId !== null && !cell.isHit) {
+                    this.aiTargetList.push({ x: x, y: y }); // Save ship tile to the target list
+                }
+            }
+        }
     }
 
-    
     //attempts to fire at a target
-    attemptFire(x, y, targetPlayer, sourcePlayer){
+    attemptFire(x, y, targetPlayer, sourcePlayer) {
         if (this.maps[targetPlayer] == undefined) { //no player
             return [false, "UndefinedPlayer"];
-        } 
+        }
 
-        if (x < 0 || y < 0 || x >= this.gridDimensions || y >= this.gridDimensions){ //out of bounds
+        if (x < 0 || y < 0 || x >= this.gridDimensions || y >= this.gridDimensions) { //out of bounds
             return [false, "BoundsRejection"];
         }
 
@@ -203,14 +393,14 @@ class BattleshipRound {
             return [false, "InvalidGuess"]
         }
 
-        if (mapSquareData.shipId === null || mapSquareData.shipId === undefined){ //checks to see if the space has not been hit and if there is no ship
+        if (mapSquareData.shipId === null || mapSquareData.shipId === undefined) { //checks to see if the space has not been hit and if there is no ship
             mapSquareData.isHit = true;
             return [false, "TrueMiss"];
         }
 
         const hitShipObject = this.maps[targetPlayer].Ships[mapSquareData.shipId];
-        
-        if (hitShipObject === null || hitShipObject.IsSunk || mapSquareData.isHit){ //if bad guess
+
+        if (hitShipObject === null || hitShipObject.IsSunk || mapSquareData.isHit) { //if bad guess
             return [false, "InvalidGuess"];
         }
 
@@ -219,25 +409,25 @@ class BattleshipRound {
 
         let isShipSunk = true;
         hitShipObject.Definition.forEach(coordinate => { //checks to see if a ship was sunk
-            if (this.maps[targetPlayer].Map[coordinate.x][coordinate.y].isHit === false){
+            if (this.maps[targetPlayer].Map[coordinate.x][coordinate.y].isHit === false) {
                 isShipSunk = false;
             }
         });
 
         this.maps[targetPlayer].Ships[mapSquareData.shipId].IsSunk = isShipSunk;
 
-        if (isShipSunk){ //if it is sunk, check to see if the whole ship if sunk. if so, check win condition.
+        if (isShipSunk) { //if it is sunk, check to see if the whole ship if sunk. if so, check win condition.
             let didSourcePlayerWinGame = true;
             for (let shipID in this.maps[targetPlayer].Ships) {
                 if (this.maps[targetPlayer].Ships.hasOwnProperty(shipID)) {
                     let shipObject = this.maps[targetPlayer].Ships[shipID];
-                    if (shipObject.IsSunk === false){
+                    if (shipObject.IsSunk === false) {
                         didSourcePlayerWinGame = false;
                     }
                 }
             }
 
-            if (didSourcePlayerWinGame){
+            if (didSourcePlayerWinGame) {
                 return [true, "GameWin"]
             }
         }
@@ -248,4 +438,4 @@ class BattleshipRound {
 
 }
 
-module.exports = [ BattleshipRound, AIPlayer, NO_AI, EASY, MEDIUM, HARD ];
+module.exports = [BattleshipRound, AIPlayer, NO_AI, EASY, MEDIUM, HARD];

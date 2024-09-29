@@ -1,6 +1,6 @@
 <!-- homeScreen.html
 Description: The starting screen and setting selection for joining or creating a game of battleship
-Inputs: 
+Inputs:
 Outputs: Links to main.html to play game
 Sources: stackoverflow.com (for style troubleshooting like aligning items to center), w3schools.com (for general html elements)
 Authors: Katie Golder, William Johnson
@@ -10,97 +10,115 @@ Creation date: 9-10-24
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="../assets/connection.js"></script> <!--Connects to server-->
-  <title>Begin Battleship Game</title>
-  <h1>Let's Play Battleship</h1>
-  <link rel="stylesheet" href="styleHomeScreen.css"> <!--Adds style using css file-->
+    <script src="../assets/connection.js"></script> <!--Connects to server-->
+    <title>Begin Battleship Game</title>
+    <h1>Let's Play Battleship</h1>
+    <link rel="stylesheet" href="styleHomeScreen.css"> <!--Adds style using css file-->
 </head>
 
 <body>
     <!--Communicates to user that they are waiting on connection to server-->
     <div id="loading">
-      <h3>Waiting for Battleship Server...</h3>
-      <p>If this message persists, please make sure that you are running the battleship server program on the local computer, and that the config "Build" value is set to "Dev".</p>
+        <h3>Waiting for Battleship Server...</h3>
+        <p>If this message persists, please make sure that you are running the battleship server program on the local computer, and that the config "Build" value is set to "Dev".</p>
     </div>
 
     <!--Create buttons for player to start or join a game which activates that respective function-->
-    <div id ="buttons" style="width: 300px; margin: auto; display:none;">
+    <div id="buttons" style="width: 300px; margin: auto; display:none;">
         <button id="1PGameButton">Start 1 Player Game</button>
         <button id="2PGameButton">Start 2 Player Game</button>
-      <button id="joinGameButton">Join 2 Player Game</button>
+        <button id="joinGameButton">Join 2 Player Game</button>
     </div>
 </body>
 
-    <!--Forms to get the player's input of number of ships to play with if playing single player, hosting a 2-player game, and join code if joining a game-->
-    <form id="new1PGame" style="display:none">
-        <p>Number of Ships</p>
-        <div class="ship_select1P" style="width: 300px; margin: 0 auto; ">
-            <input type="radio" id="1P1" name="ship_select1P" value="1" required>
-            <label for="1P1">1</label><br>
-            <input type="radio" id="2P1" name="ship_select1P" value="2" required>
-            <label for="2P1">2</label><br>
-            <input type="radio" id="3P1" name="ship_select1P" value="3" required>
-            <label for="3P1">3</label><br>
-            <input type="radio" id="4P1" name="ship_select1P" value="4" required>
-            <label for="4P1">4</label><br>
-            <input type="radio" id="5P1" name="ship_select1P" value="5" required checked> <!--Default value. Mostly to see the difference between P1 and P2 button selections-->
-            <label for="5P1">5</label><br>
-            <input id="start1PGameButton" type="button" value="Play">
-        </div>
+<!--Forms to get the player's input of number of ships to play with if playing single player, hosting a 2-player game, and join code if joining a game-->
+<form id="new1PGame" style="display:none">
+    <p>Number of Ships</p>
+    <div class="ship_select1P" style="width: 300px; margin: 0 auto; ">
+        <input type="radio" id="1P1" name="ship_select1P" value="1" required>
+        <label for="1P1">1</label><br>
+        <input type="radio" id="2P1" name="ship_select1P" value="2" required>
+        <label for="2P1">2</label><br>
+        <input type="radio" id="3P1" name="ship_select1P" value="3" required>
+        <label for="3P1">3</label><br>
+        <input type="radio" id="4P1" name="ship_select1P" value="4" required>
+        <label for="4P1">4</label><br>
+        <input type="radio" id="5P1" name="ship_select1P" value="5" required checked> <!--Default value. Mostly to see the difference between P1 and P2 button selections-->
+        <label for="5P1">5</label><br>
+    </div>
+
+    <!-- Buttons for selecting difficulty level -->
+    <p>Select Difficulty</p>
+    <div class="difficulty_select1P" style="width: 300px; margin: 0 auto;">
+        <input type="radio" id="easy1P" name="difficulty_select1P" value="easy" required>
+        <label for="easy1P">Easy</label><br>
+        <input type="radio" id="medium1P" name="difficulty_select1P" value="medium" required checked>
+        <label for="medium1P">Medium</label><br>
+        <input type="radio" id="hard1P" name="difficulty_select1P" value="hard" required>
+        <label for="hard1P">Hard</label><br>
+    </div>
+
+    <!-- Centering and applying button styles -->
+    <div style="text-align: center; margin-top: 20px;">
+        <input id="start1PGameButton" class="styled-button" type="button" value="Play">
+    </div>
+</form>
     </form>
-    <form id="new2PGame" style="display:none" ><!--Player is creating game and will redirect to game once number of ships is selected using radio buttons-->
-        <p>Number of Ships</p>
-        <div class="ship_select" style="width: 300px; margin: 0 auto; "> <!--Unites radio buttons to match style and same class-->
-          <input type="radio" id="1" name="ship_select" value="1" required>
-          <label for="1">1</label><br>
-          <input type="radio" id="2" name="ship_select" value="2" required>
-          <label for="2">2</label><br>
-          <input type="radio" id="3" name="ship_select" value="3" required checked>
-          <label for="3">3</label><br>
-          <input type="radio" id="4" name="ship_select" value="4" required>
-          <label for="4">4</label><br>
-          <input type="radio" id="5" name="ship_select" value="5" required>
-          <label for="5">5</label><br>
-          <input id="createPartyButton" type="button" value="Play"> <!--Submits number of ships and starts game-->
-      </div>
-    </form>
-
-    <!--Player is joining Game and will redirect to game once code is entered-->
-    <div id="joinGame" style = "display:none; text-align: center;"> 
-        <p>Join Code</p>
-        <input id="joinCodeField" type="text" name="enterCode" required>
-        <input id="joinPartyButton" type="submit" value="Play" style="width: 300px; margin: 0 auto;">
+<form id="new2PGame" style="display:none">
+    <!--Player is creating game and will redirect to game once number of ships is selected using radio buttons-->
+    <p>Number of Ships</p>
+    <div class="ship_select" style="width: 300px; margin: 0 auto; ">
+        <!--Unites radio buttons to match style and same class-->
+        <input type="radio" id="1" name="ship_select" value="1" required>
+        <label for="1">1</label><br>
+        <input type="radio" id="2" name="ship_select" value="2" required>
+        <label for="2">2</label><br>
+        <input type="radio" id="3" name="ship_select" value="3" required checked>
+        <label for="3">3</label><br>
+        <input type="radio" id="4" name="ship_select" value="4" required>
+        <label for="4">4</label><br>
+        <input type="radio" id="5" name="ship_select" value="5" required>
+        <label for="5">5</label><br>
+        <input id="createPartyButton" type="button" value="Play"> <!--Submits number of ships and starts game-->
     </div>
+</form>
 
-    <!--Displays unique code for oponents to join the same game -->
-    <div id="displayPartyCode" style="display:none">
-      <h3>Party Code</h3>
-      <p>Share this code with your oponent so they can join the round!</p>
-      <h2 id="partyCode">[Loading...]</h2>
-    </div>
+<!--Player is joining Game and will redirect to game once code is entered-->
+<div id="joinGame" style="display:none; text-align: center;">
+    <p>Join Code</p>
+    <input id="joinCodeField" type="text" name="enterCode" required>
+    <input id="joinPartyButton" type="submit" value="Play" style="width: 300px; margin: 0 auto;">
+</div>
 
-    <!--Only displays for joining player while waiting on host -->
-    <div id="waitingForHost" style="display:none">
-      <h3>Waiting for Host...</h3>
-      <p>You've joined a party! We're now waiting for the host to start the game...</p>
-    </div>
+<!--Displays unique code for oponents to join the same game -->
+<div id="displayPartyCode" style="display:none">
+    <h3>Party Code</h3>
+    <p>Share this code with your oponent so they can join the round!</p>
+    <h2 id="partyCode">[Loading...]</h2>
+</div>
 
-    <!--Only shows for Host to begin game with opponent connected-->
-    <div id ="startButton" style="width: 300px; margin: auto; display:none; text-align:center;">
-      <button id="startGameButton">Start Game!</button>
-    </div>
+<!--Only displays for joining player while waiting on host -->
+<div id="waitingForHost" style="display:none">
+    <h3>Waiting for Host...</h3>
+    <p>You've joined a party! We're now waiting for the host to start the game...</p>
+</div>
 
-    <!--Shows while game is beginning-->
-    <p id="loadingGameScreen" style="display:none">Beginning Round...</p>
+<!--Only shows for Host to begin game with opponent connected-->
+<div id="startButton" style="width: 300px; margin: auto; display:none; text-align:center;">
+    <button id="startGameButton">Start Game!</button>
+</div>
 
-    <!--Shows if error is encountered-->
-    <div class="error-footer" id="errorFooter">
-        <p id="errorLabel">Error: Something went wrong. Please try again later.</p>
-    </div>
+<!--Shows while game is beginning-->
+<p id="loadingGameScreen" style="display:none">Beginning Round...</p>
 
-    <!--Functions defining to show or hide the corresponding form per game mode selection -->
-    <script>
-      document.addEventListener("DOMContentLoaded", function () { 
+<!--Shows if error is encountered-->
+<div class="error-footer" id="errorFooter">
+    <p id="errorLabel">Error: Something went wrong. Please try again later.</p>
+</div>
+
+<!--Functions defining to show or hide the corresponding form per game mode selection -->
+<script>
+      document.addEventListener("DOMContentLoaded", function () {
           function waitForSocket(callback) {
               if (window.socket) {
                   callback();
@@ -108,7 +126,7 @@ Creation date: 9-10-24
                   setTimeout(() => waitForSocket(callback), 100);
               }
           }
-  
+
           waitForSocket(() => {
             //Creating needed html elements to communicate between the server and users
             const new1PGameArea = document.getElementById("new1PGame");
@@ -140,6 +158,7 @@ Creation date: 9-10-24
 
             const radios = document.getElementsByName('ship_select');//Checks what number of ships the host chose
             const radios1P = document.getElementsByName('ship_select1P');
+            const difficultyRadios = document.getElementsByName('difficulty_select1P');
 
               function new1PGame() {//Function runs when 1P game button is selected
                 new1PGameArea.style.display = "block";
@@ -173,12 +192,18 @@ Creation date: 9-10-24
                     break;
                   }
                 }
-                socket.emit('initiateSinglePlayer', numberOfShips); //Sends the number of ships selected to the server to try to create the game
+                for (const radio of difficultyRadios) {
+                  if (radio.checked) {
+                    difficultyLevel = radio.value; //Stores the value of selected radio button for number of ships
+                    break;
+                  }
+                }
+                socket.emit('initiateSinglePlayer', numberOfShips, difficultyLevel); //Sends the number of ships selected to the server to try to create the game
                 });
 
             createPartyButton.addEventListener('click', () => { //Sends request
               let numberOfShips = 3; //Default ship value
-              
+
               //Loops through the radio buttons to find the checked one
               for (const radio of radios) {
                 if (radio.checked) {
@@ -196,7 +221,7 @@ Creation date: 9-10-24
                 buttonsArea.style.display = "none";
                 partyCodeLabel.textContent = data.matchId;
                 partyCodeArea.style.display = "block";
-              } else {//Runs if game creation encounters error 
+              } else {//Runs if game creation encounters error
                 errorLabel.textContent = "Failed to Create Party: " + data.reason;
                 errorFooterArea.style.display = "block";
                 newGameArea.style.display = "none";
@@ -222,7 +247,7 @@ Creation date: 9-10-24
                   joinGameArea.style.display = "none";
                   buttonsArea.style.display = "none";
                   waitingArea.style.display = "block";
-                } else {//Runs if game joining encounters error 
+                } else {//Runs if game joining encounters error
                   errorLabel.textContent = "Failed to Join Party: " + data.reason;
                   errorFooterArea.style.display = "block";
                   joinGameArea.style.display = "none";
@@ -254,7 +279,7 @@ Creation date: 9-10-24
             });
           });
       });
-  </script>
+</script>
 
 </body>
 </html>

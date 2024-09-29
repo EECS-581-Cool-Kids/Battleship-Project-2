@@ -90,10 +90,18 @@ io.on('connection', (socket) => {
 
     socket.emit('getClientId', {});
 
-    // Placeholder for future AI implementation
-    socket.on('initiateSinglePlayer', (numShips) => {
-        // TODO: ALLOW SPECIFYING DIFFICULTY
-        const AI_TYPE = EASY;
+    // AI implementation
+    socket.on('initiateSinglePlayer', (numShips, difficulty) => {
+
+        if (difficulty === 'easy') {
+            AI_TYPE = EASY;
+        }
+        else if (difficulty === 'medium') {
+            AI_TYPE = MEDIUM
+        }
+        else if (difficulty === 'hard') {
+            AI_TYPE = HARD;
+        }
 
         if (playerPartyAssociations[socket.ClientId] !== undefined) {
             socket.emit("createParty", {
