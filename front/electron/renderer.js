@@ -4,9 +4,9 @@
 //Sources: electronjs.org
 //Authors: Matthew Petillo
 //Creation date: 9-10-24
-const func = async () => {  //async function
-  const response = await window.versions.ping()  //ping
+const func = async () => {
+  const response = await window.versions.ping()
   console.log(response) // prints out 'pong'
-}  //end function
+}
 
-func()  //calls function
+func()
