@@ -1,2 +1,2 @@
 #!/bin/sh
-node ./scripts/update-client-id.js
+node ./scripts/update-client-id.js  # This is the script that updates the client id
