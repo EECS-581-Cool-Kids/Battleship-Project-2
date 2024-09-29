@@ -6,20 +6,20 @@
 //Authors: Matthew Petillo, William Johnson
 //Creation date: 9-10-24
 
-const { contextBridge, ipcRenderer } = require('electron') //electron imports
+const { contextBridge, ipcRenderer } = require('electron')
 
-contextBridge.exposeInMainWorld('versions', { //exposes versions
-  node: () => process.versions.node, //node version
-  chrome: () => process.versions.chrome, //chrome version
-  electron: () => process.versions.electron, //electron version
-  ping: () => ipcRenderer.invoke('ping'), //ping
+contextBridge.exposeInMainWorld('versions', {
+  node: () => process.versions.node,
+  chrome: () => process.versions.chrome,
+  electron: () => process.versions.electron,
+  ping: () => ipcRenderer.invoke('ping'),
   // we can also expose variables, not just functions
-}) //end contextBridge
+})
 
-contextBridge.exposeInMainWorld('api', { //exposes api
-  loadConfig: () => ipcRenderer.invoke('load-config'), //loads config
-}); //end contextBridge
+contextBridge.exposeInMainWorld('api', {
+  loadConfig: () => ipcRenderer.invoke('load-config'),
+});
 
-contextBridge.exposeInMainWorld('electronAPI', { //exposes electronAPI
-  navigateToPage: (page) => ipcRenderer.send('navigate-to-page', page) //navigates to page
-}); //end contextBridge
+contextBridge.exposeInMainWorld('electronAPI', {
+  navigateToPage: (page) => ipcRenderer.send('navigate-to-page', page)
+});

@@ -7,33 +7,33 @@ Authors: William Johnson
 Creation date: 9-15-24
 */
 
-const fs = require('fs'); // File system
-const path = './front/assets/config.json'; // Path to the JSON file
+const fs = require('fs');
+const path = './front/assets/config.json';
 
 // Read the config file
-fs.readFile(path, 'utf8', (err, data) => { // Read the file
-    if (err) { // If there
-        console.error(`Error reading file: ${err}`); // Log the error
-        process.exit(1); // Exit the
-    } // End if
+fs.readFile(path, 'utf8', (err, data) => {
+    if (err) {
+        console.error(`Error reading file: ${err}`);
+        process.exit(1);
+    }
 
-    let config; // Config object
-    try { // Try to parse the JSON
-        config = JSON.parse(data); // Parse the JSON
-    } catch (err) { // If there is an error
-        console.error(`Error parsing JSON: ${err}`); // Log the error
-        process.exit(1); // Exit the process
-    } // End try
+    let config;
+    try {
+        config = JSON.parse(data);
+    } catch (err) {
+        console.error(`Error parsing JSON: ${err}`);
+        process.exit(1);
+    }
 
     // Set ClientId to null
-    config.ClientId = null; // Set the client ID to null
+    config.ClientId = null;
 
     // Write the updated config back to the file
-    fs.writeFile(path, JSON.stringify(config, null, 4), (err) => { // Write the updated data back to the file
-        if (err) { // If there's an error
-            console.error(`Error writing file: ${err}`); // Log the error
-            process.exit(1); // Exit the process
-        } // End if
-        console.log('ClientId has been set to null.'); // Log the success
-    }); // End write file
-}); // End read file
+    fs.writeFile(path, JSON.stringify(config, null, 4), (err) => {
+        if (err) {
+            console.error(`Error writing file: ${err}`);
+            process.exit(1);
+        }
+        console.log('ClientId has been set to null.');
+    });
+});
