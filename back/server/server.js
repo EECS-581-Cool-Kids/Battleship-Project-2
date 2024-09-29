@@ -92,7 +92,6 @@ io.on('connection', (socket) => {
 
     // Placeholder for future AI implementation
     socket.on('initiateSinglePlayer', (numShips) => {
-        // TODO: ALLOW SPECIFYING DIFFICULTY
         const AI_TYPE = EASY;
 
         if (playerPartyAssociations[socket.ClientId] !== undefined) {
