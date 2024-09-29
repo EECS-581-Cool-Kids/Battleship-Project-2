@@ -93,7 +93,7 @@ Creation date: 9-10-24
 <!--Displays unique code for opponents to join the same game -->
 <div id="displayPartyCode" style="display:none"> <!-- display party code -->
     <h3>Party Code</h3> <!-- party code -->
-    <p>Share this code with your oponent so they can join the round!</p> <!-- share the code with the opponent -->
+    <p>Share this code with your opponent so they can join the round!</p> <!-- share the code with the opponent -->
     <h2 id="partyCode">[Loading...]</h2> <!-- party code -->
 </div> <!-- end of display party code -->
 
@@ -211,7 +211,7 @@ Creation date: 9-10-24
                   break; //Breaks the loop
                 } //End of if statement
               } //End of for loop
-              //All socket.emit statments take (A server functionName, Data to send)
+              //All socket.emit statements take (A server functionName, Data to send)
               socket.emit('tryCreateParty', numberOfShips); //Sends the number of ships selected to the server to try to create the game
             }); //End of event listener
 

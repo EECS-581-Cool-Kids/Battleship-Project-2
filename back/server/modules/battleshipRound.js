@@ -197,7 +197,7 @@ class BattleshipRound {  //creates a battleship round object
                         } // End if the next tile does not have a ship ID
                     } // End if the next tile is valid
                 }  // End if the hit count is less than the ship length
-                else { //empty data for ship targeting process, reverts a to random targeting
+                else { //empty data for ship targeting process, reverts to a random targeting
                     this.aiDirection = null; // Reset the direction
                     this.firstHit = null; // Reset the first hit
                     this.currentTarget = null; // Reset the current target
@@ -225,7 +225,7 @@ class BattleshipRound {  //creates a battleship round object
                         } // End if the tile has not been hit
                     } // End for each tile in the adjacent tiles
                 }
-                else { //empty data for ship targeting process, reverts a to random targeting
+                else { //empty data for ship targeting process, reverts to a random targeting
                     this.aiDirection = null; // Reset the direction
                     this.firstHit = null; // Reset the first hit
                     this.currentTarget = null; // Reset the current target
@@ -275,7 +275,7 @@ class BattleshipRound {  //creates a battleship round object
 
         return { x: x, y: y } // Return the tile
     } // End randomTile
-    //aquires the next coordinate for targeting based on the existing direction of attack. Used in medium difficulty
+    //acquires the next coordinate for targeting based on the existing direction of attack. Used in medium difficulty
     getNextTileInDirection(fromTile, direction, opMap) { // Get the next tile in the direction
         let newX = fromTile.x; // Set the new x
         let newY = fromTile.y; // Set the new y

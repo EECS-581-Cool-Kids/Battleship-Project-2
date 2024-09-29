@@ -217,7 +217,7 @@ document.addEventListener("DOMContentLoaded", function () { //waits for content 
 
         // check if all ships are placed
         function checkAllShipsPlaced() {
-            let count = 5; //counts backwards to account for how ships are created formatwise
+            let count = 5; //counts backwards to account for how ships are created format-wise
             const curShips = Object.keys(playerShips); //current ships
             for (let ship in Object.values(curShips)){ //for ship in current ships
                 if (count > numShips && playerShips[curShips[ship]].length != 0){ //checks if ship should be empty
