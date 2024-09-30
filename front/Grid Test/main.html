@@ -7,16 +7,16 @@ Authors: Chase Curtis, William Johnson
 Creation date: 9-10-24
 -->
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html>  <!-- This is the html file that will be served by the server to the player -->
+<html lang="en"> <!-- in english -->
+<head> <!-- head tag -->
     <meta charset="UTF-8"> <!-- character set that the page will use -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- viewport that the page will use -->
     <title>Let's Play Battleship!</title> <!-- title of the page -->
     <link rel="stylesheet" href="styles.css"> <!-- link to the stylesheet that the page -->
     <script src="../assets/connection.js"></script> <!-- link to the connection.js file -->
-</head>
-<body>
+</head> <!-- end of head tag -->
+<body> <!-- body tag -->
     <h1>Battleship Game</h1> <!-- title of the page -->
 
     <div id="setupControls"> <!-- setup controls for the game -->
@@ -28,33 +28,40 @@ Creation date: 9-10-24
         <button id="toggleOrientation">Horizontal</button> <!-- button to toggle the orientation of the ship -->
         <button id="removeShip">Remove Selected Ship</button> <!-- button to remove the selected ship -->
         <button id="startGame" disabled>Ready!</button> <!-- button to start the game -->
-    </div>
+    </div> <!-- end of setup controls -->
 
     <h2 id="waitingForAllPlayers" style="display: none;">Waiting for other player...</h2> <!-- waiting for other player to join the game -->
-    
-    <br/>
-    <br/>
+
+    <br/> <!-- line break -->
+    <br/> <!-- line break -->
 
     <div id="playerGridContainer"> <!-- container for the player's grid -->
         <div id="grid"></div> <!-- grid for the player -->
-    </div>
-
+    </div> <!-- end of player grid container -->
+    
     <h2 id="turnIndicatorLabel" style="display:none;">It's Your Turn!</h2> <!-- label for the turn indicator -->
-    <br>
+    <br> <!-- line break -->
     <h3 id="gridHeader" style="display:none">Your Grid (left) | Opponent's Grid (right)</h3> <!-- header for the grids -->
-    <br/>
+    <div> <!-- container for the grids -->
+        <select id="shotSelect" style="display:none;"> <!-- dropdown menu for the shots -->
+            <option value="1x1">1x1 Shot</option> <!-- option for the 1x1 shot -->
+            <option value="3x3">3x3 Shot</option> <!-- option for the 3x3 shot -->
+        </select> <!-- end of the dropdown menu -->
+        <h3 id="specialShotCounter" style="display:none;">Special Shots: 3</h3> <!-- counter for the special shots -->
+    </div> <!-- end of the container for the grids -->
+    <br/> <!-- line break -->
 
     <div id="gameBoardContainer" style="display: none;"> <!-- container for the game board -->
         <div id="playerBoard"></div> <!-- player's board -->
         <div id="opponentBoard"></div> <!-- opponent's board -->
-    </div>
+    </div> <!-- end of the game board container -->
 
     <h3 id="statusLabel" style="display: none;">Status Label</h3> <!-- status label for the game -->
 
     <div class="error-footer" id="errorFooter"> <!-- error footer for the page -->
         <p id="errorLabel">Error: Something went wrong. Please try again later.</p> <!-- error label for the page -->
-    </div>
+    </div> <!-- end of the error footer -->
 
     <script src="script.js"></script> <!-- link to the script.js file -->
-</body>
-</html>
+</body> <!-- end of body tag -->
+</html> <!-- end of html file -->
